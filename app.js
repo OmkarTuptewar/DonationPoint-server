@@ -9,8 +9,23 @@ dotenv.config();
 const connectDB = require("./db/conn.js");
 connectDB();
 
-app.use(cors({ origin: 'http://localhost:3000',
-credentials:true }))
+const allowedOrigins = [
+    "https://donation-point-git-main-omkartuptewars-projects.vercel.app", // Your deployed frontend
+    "http://localhost:3000", // Local development
+  ];
+  
+  app.use(
+    cors({
+      origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error("Not allowed by CORS"));
+        }
+      },
+      credentials: true,
+    })
+  );
 app.use(express.json());
 const User=require('./model/userSchema');
 
